@@ -1,0 +1,6 @@
+{
+    "python.analysis.extraPaths": [
+        "./fast-api-client"
+        "./fast-api-client/api/bookings"
+    ]
+}

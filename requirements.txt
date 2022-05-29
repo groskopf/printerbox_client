@@ -1,0 +1,17 @@
+#aiofiles
+#asgiref
+#click
+fastapi
+#h11
+#Pillow
+#pydantic
+#reportlab
+starlette
+#typing_extensions
+#python-multipart
+#uvicorn[standard]
+#Werkzeug
+websocket-client
+autopep8
+rel
+openapi-python-client
