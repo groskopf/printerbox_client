@@ -15,6 +15,8 @@ RUN apt-get update && apt-get install -y \
     && apt-get clean \
     && rm -rf /var/lib/{apt,dpkg,cache,log}/
 
+RUN mkdir /app
+
 #COPY blink/blink1-tool /usr/bin
 #COPY blink/51-blink1.rules /etc/udev/rules.d/51-blink1.rules
 
