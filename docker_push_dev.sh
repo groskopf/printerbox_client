@@ -7,7 +7,7 @@ if [ -z "$CR_PAT" ]; then
 fi
 echo $CR_PAT | docker login ghcr.io -u USERNAME --password-stdin
 
-image=ghcr.io/groskopf/printerbox_client
+image=ghcr.io/groskopf/printerbox_client_dev
 
-docker build -t $image .
+docker build -t $image Dockerfile.dev
 docker push $image:latest
