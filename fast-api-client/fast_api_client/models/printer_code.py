@@ -1,0 +1,20 @@
+from enum import Enum
+
+
+class PrinterCode(str, Enum):
+    XDESP95271_P = "XDESP95271_p"
+    W8IL27UCYQ_M = "W8IL27UCYQ_m"
+    VALUE_2 = "1OPYKBGXVN_1"
+    YF1OF5FWZ0_2 = "YF1OF5FWZ0_2"
+    EK4M52IXL5_3 = "EK4M52IXL5_3"
+    C0ZE5TM5V4_4 = "C0ZE5TM5V4_4"
+    VALUE_6 = "21YG0T6L8O_5"
+    GRR4QKRYZP_6 = "GRR4QKRYZP_6"
+    R6CYBCY2XF_7 = "R6CYBCY2XF_7"
+    VALUE_9 = "8SCNWZUF9M_8"
+    AQ3PB4Q7I0_9 = "AQ3PB4Q7I0_9"
+    COIC1PEJ8J_10 = "COIC1PEJ8J_10"
+    MB5C43920Y_11 = "MB5C43920Y_11"
+
+    def __str__(self) -> str:
+        return str(self.value)
