@@ -4,4 +4,3 @@ websocket-client
 autopep8
 rel
 openapi-python-client
-./fast-api-client
