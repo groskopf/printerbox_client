@@ -9,5 +9,5 @@ echo $CR_PAT | docker login ghcr.io -u USERNAME --password-stdin
 
 image=ghcr.io/groskopf/printerbox_client
 
-docker build -t $image --no-cache .
+docker build -t $image --no-cache . || exit -1
 docker push $image:latest

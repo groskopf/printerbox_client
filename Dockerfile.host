@@ -12,5 +12,4 @@ RUN npm install @openapitools/openapi-generator-cli -g
 RUN openapi-python-client generate --url https://api.printerboks.dk/api/v1/openapi.json && \
     pip install --no-cache-dir fast-api-client
 
-
 CMD ["python", "main:app"]
