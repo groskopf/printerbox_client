@@ -16,7 +16,7 @@ def printWS(message: str):
 
 
 def loadPrinterConfig():
-    with open('config/printerbox_config.json') as config_file:
+    with open('/config/printerbox_config.json') as config_file:
         config = json.load(config_file)
         return config['config']
 

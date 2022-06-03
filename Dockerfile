@@ -1,10 +1,12 @@
-FROM balenalib/raspberry-pi-debian-python:latest
+FROM printerbox_python:v2
 
 
-COPY requirements.txt /tmp/requirements.txt
-RUN pip install --no-cache-dir --upgrade -r /tmp/requirements.txt
+#COPY requirements.txt /tmp/requirements.txt
+#RUN pip install --no-cache-dir --upgrade -r /tmp/requirements.txt
 
-RUN mkdir /app
-COPY *.py /app/
-COPY fast-api-client/*.py /app/
-RUN pip install --no-cache-dir --upgrade /app/fast-api-client
+RUN mkdir -p /app/src
+COPY *.py /app/src/
+
+RUN mkdir -p /app/src/fast-api-client
+COPY fast-api-client/ /app/src/fast-api-client
+RUN pip install --no-cache-dir --upgrade /app/src/fast-api-client
