@@ -3,25 +3,25 @@ from typing import Any, Dict, List, Type, TypeVar
 import attr
 
 from ..models.layout import Layout
-from ..models.name_tag_sheet_type import NameTagSheetType
+from ..models.sheet_type import SheetType
 
-T = TypeVar("T", bound="NameTagSheetLayouts")
+T = TypeVar("T", bound="SheetLayouts")
 
 
 @attr.s(auto_attribs=True)
-class NameTagSheetLayouts:
+class SheetLayouts:
     """
     Attributes:
-        name_tag_sheet_type (NameTagSheetType): An enumeration.
+        sheet_type (SheetType): An enumeration.
         layouts (List[Layout]):
     """
 
-    name_tag_sheet_type: NameTagSheetType
+    sheet_type: SheetType
     layouts: List[Layout]
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
-        name_tag_sheet_type = self.name_tag_sheet_type.value
+        sheet_type = self.sheet_type.value
 
         layouts = []
         for layouts_item_data in self.layouts:
@@ -33,7 +33,7 @@ class NameTagSheetLayouts:
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
-                "name_tag_sheet_type": name_tag_sheet_type,
+                "sheet_type": sheet_type,
                 "layouts": layouts,
             }
         )
@@ -43,7 +43,7 @@ class NameTagSheetLayouts:
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         d = src_dict.copy()
-        name_tag_sheet_type = NameTagSheetType(d.pop("name_tag_sheet_type"))
+        sheet_type = SheetType(d.pop("sheet_type"))
 
         layouts = []
         _layouts = d.pop("layouts")
@@ -52,13 +52,13 @@ class NameTagSheetLayouts:
 
             layouts.append(layouts_item)
 
-        name_tag_sheet_layouts = cls(
-            name_tag_sheet_type=name_tag_sheet_type,
+        sheet_layouts = cls(
+            sheet_type=sheet_type,
             layouts=layouts,
         )
 
-        name_tag_sheet_layouts.additional_properties = d
-        return name_tag_sheet_layouts
+        sheet_layouts.additional_properties = d
+        return sheet_layouts
 
     @property
     def additional_keys(self) -> List[str]:

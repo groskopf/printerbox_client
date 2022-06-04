@@ -17,14 +17,14 @@ class Booking:
         start_date (datetime.date):
         end_date (datetime.date):
         printer_code (PrinterCode): An enumeration.
-        code (str):
+        booking_code (str):
         name_tag_type (NameTagType): An enumeration.
     """
 
     start_date: datetime.date
     end_date: datetime.date
     printer_code: PrinterCode
-    code: str
+    booking_code: str
     name_tag_type: NameTagType
     additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
 
@@ -33,7 +33,7 @@ class Booking:
         end_date = self.end_date.isoformat()
         printer_code = self.printer_code.value
 
-        code = self.code
+        booking_code = self.booking_code
         name_tag_type = self.name_tag_type.value
 
         field_dict: Dict[str, Any] = {}
@@ -43,7 +43,7 @@ class Booking:
                 "start_date": start_date,
                 "end_date": end_date,
                 "printer_code": printer_code,
-                "code": code,
+                "booking_code": booking_code,
                 "name_tag_type": name_tag_type,
             }
         )
@@ -59,7 +59,7 @@ class Booking:
 
         printer_code = PrinterCode(d.pop("printer_code"))
 
-        code = d.pop("code")
+        booking_code = d.pop("booking_code")
 
         name_tag_type = NameTagType(d.pop("name_tag_type"))
 
@@ -67,7 +67,7 @@ class Booking:
             start_date=start_date,
             end_date=end_date,
             printer_code=printer_code,
-            code=code,
+            booking_code=booking_code,
             name_tag_type=name_tag_type,
         )
 

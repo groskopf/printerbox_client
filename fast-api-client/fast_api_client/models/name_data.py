@@ -54,7 +54,7 @@ class NameData:
         if line_5 is not UNSET:
             field_dict["line_5"] = line_5
         if image_name is not UNSET:
-            field_dict["imageName"] = image_name
+            field_dict["image_name"] = image_name
         if qr_code is not UNSET:
             field_dict["qr_code"] = qr_code
 
@@ -73,7 +73,7 @@ class NameData:
 
         line_5 = d.pop("line_5", UNSET)
 
-        image_name = d.pop("imageName", UNSET)
+        image_name = d.pop("image_name", UNSET)
 
         qr_code = d.pop("qr_code", UNSET)
 

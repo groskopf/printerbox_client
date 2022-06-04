@@ -1,21 +1,21 @@
-from typing import Any, Dict, Optional, Union, cast
+from typing import Any, Dict, Optional, Union
 
 import httpx
 
 from ...client import Client
 from ...models.details import Details
 from ...models.http_validation_error import HTTPValidationError
-from ...models.printer_code import PrinterCode
+from ...models.sheet_layouts import SheetLayouts
+from ...models.sheet_type import SheetType
 from ...types import Response
 
 
 def _get_kwargs(
-    printer_code: PrinterCode,
-    filename: str,
+    sheet_type: SheetType,
     *,
     client: Client,
 ) -> Dict[str, Any]:
-    url = "{}/printers/{printer_code}/{filename}".format(client.base_url, printer_code=printer_code, filename=filename)
+    url = "{}/layouts/sheets/{sheet_type}".format(client.base_url, sheet_type=sheet_type)
 
     headers: Dict[str, str] = client.get_headers()
     cookies: Dict[str, Any] = client.get_cookies()
@@ -29,9 +29,10 @@ def _get_kwargs(
     }
 
 
-def _parse_response(*, response: httpx.Response) -> Optional[Union[Any, Details, HTTPValidationError]]:
+def _parse_response(*, response: httpx.Response) -> Optional[Union[Details, HTTPValidationError, SheetLayouts]]:
     if response.status_code == 200:
-        response_200 = cast(Any, None)
+        response_200 = SheetLayouts.from_dict(response.json())
+
         return response_200
     if response.status_code == 404:
         response_404 = Details.from_dict(response.json())
@@ -44,7 +45,7 @@ def _parse_response(*, response: httpx.Response) -> Optional[Union[Any, Details,
     return None
 
 
-def _build_response(*, response: httpx.Response) -> Response[Union[Any, Details, HTTPValidationError]]:
+def _build_response(*, response: httpx.Response) -> Response[Union[Details, HTTPValidationError, SheetLayouts]]:
     return Response(
         status_code=response.status_code,
         content=response.content,
@@ -54,24 +55,21 @@ def _build_response(*, response: httpx.Response) -> Response[Union[Any, Details,
 
 
 def sync_detailed(
-    printer_code: PrinterCode,
-    filename: str,
+    sheet_type: SheetType,
     *,
     client: Client,
-) -> Response[Union[Any, Details, HTTPValidationError]]:
-    """Get Name Tag
+) -> Response[Union[Details, HTTPValidationError, SheetLayouts]]:
+    """Get Image
 
     Args:
-        printer_code (PrinterCode): An enumeration.
-        filename (str):
+        sheet_type (SheetType): An enumeration.
 
     Returns:
-        Response[Union[Any, Details, HTTPValidationError]]
+        Response[Union[Details, HTTPValidationError, SheetLayouts]]
     """
 
     kwargs = _get_kwargs(
-        printer_code=printer_code,
-        filename=filename,
+        sheet_type=sheet_type,
         client=client,
     )
 
@@ -84,47 +82,41 @@ def sync_detailed(
 
 
 def sync(
-    printer_code: PrinterCode,
-    filename: str,
+    sheet_type: SheetType,
     *,
     client: Client,
-) -> Optional[Union[Any, Details, HTTPValidationError]]:
-    """Get Name Tag
+) -> Optional[Union[Details, HTTPValidationError, SheetLayouts]]:
+    """Get Image
 
     Args:
-        printer_code (PrinterCode): An enumeration.
-        filename (str):
+        sheet_type (SheetType): An enumeration.
 
     Returns:
-        Response[Union[Any, Details, HTTPValidationError]]
+        Response[Union[Details, HTTPValidationError, SheetLayouts]]
     """
 
     return sync_detailed(
-        printer_code=printer_code,
-        filename=filename,
+        sheet_type=sheet_type,
         client=client,
     ).parsed
 
 
 async def asyncio_detailed(
-    printer_code: PrinterCode,
-    filename: str,
+    sheet_type: SheetType,
     *,
     client: Client,
-) -> Response[Union[Any, Details, HTTPValidationError]]:
-    """Get Name Tag
+) -> Response[Union[Details, HTTPValidationError, SheetLayouts]]:
+    """Get Image
 
     Args:
-        printer_code (PrinterCode): An enumeration.
-        filename (str):
+        sheet_type (SheetType): An enumeration.
 
     Returns:
-        Response[Union[Any, Details, HTTPValidationError]]
+        Response[Union[Details, HTTPValidationError, SheetLayouts]]
     """
 
     kwargs = _get_kwargs(
-        printer_code=printer_code,
-        filename=filename,
+        sheet_type=sheet_type,
         client=client,
     )
 
@@ -135,25 +127,22 @@ async def asyncio_detailed(
 
 
 async def asyncio(
-    printer_code: PrinterCode,
-    filename: str,
+    sheet_type: SheetType,
     *,
     client: Client,
-) -> Optional[Union[Any, Details, HTTPValidationError]]:
-    """Get Name Tag
+) -> Optional[Union[Details, HTTPValidationError, SheetLayouts]]:
+    """Get Image
 
     Args:
-        printer_code (PrinterCode): An enumeration.
-        filename (str):
+        sheet_type (SheetType): An enumeration.
 
     Returns:
-        Response[Union[Any, Details, HTTPValidationError]]
+        Response[Union[Details, HTTPValidationError, SheetLayouts]]
     """
 
     return (
         await asyncio_detailed(
-            printer_code=printer_code,
-            filename=filename,
+            sheet_type=sheet_type,
             client=client,
         )
     ).parsed

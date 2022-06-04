@@ -18,7 +18,7 @@ def _get_kwargs(
     booking_code: str,
     layout: Layout,
 ) -> Dict[str, Any]:
-    url = "{}/printers/".format(client.base_url)
+    url = "{}/name_tags/".format(client.base_url)
 
     headers: Dict[str, str] = client.get_headers()
     cookies: Dict[str, Any] = client.get_cookies()

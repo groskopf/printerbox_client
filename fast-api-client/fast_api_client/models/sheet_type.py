@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-class NameTagSheetType(str, Enum):
+class SheetType(str, Enum):
     VALUE_0 = "453060"
     VALUE_1 = "454070"
     VALUE_2 = "454075"

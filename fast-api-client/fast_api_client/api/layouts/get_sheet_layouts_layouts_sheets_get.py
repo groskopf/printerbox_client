@@ -3,7 +3,7 @@ from typing import Any, Dict, List, Optional
 import httpx
 
 from ...client import Client
-from ...models.file_path import FilePath
+from ...models.sheet_layouts import SheetLayouts
 from ...types import Response
 
 
@@ -11,7 +11,7 @@ def _get_kwargs(
     *,
     client: Client,
 ) -> Dict[str, Any]:
-    url = "{}/labels/".format(client.base_url)
+    url = "{}/layouts/sheets".format(client.base_url)
 
     headers: Dict[str, str] = client.get_headers()
     cookies: Dict[str, Any] = client.get_cookies()
@@ -25,12 +25,12 @@ def _get_kwargs(
     }
 
 
-def _parse_response(*, response: httpx.Response) -> Optional[List[FilePath]]:
+def _parse_response(*, response: httpx.Response) -> Optional[List[SheetLayouts]]:
     if response.status_code == 200:
         response_200 = []
         _response_200 = response.json()
         for response_200_item_data in _response_200:
-            response_200_item = FilePath.from_dict(response_200_item_data)
+            response_200_item = SheetLayouts.from_dict(response_200_item_data)
 
             response_200.append(response_200_item)
 
@@ -38,7 +38,7 @@ def _parse_response(*, response: httpx.Response) -> Optional[List[FilePath]]:
     return None
 
 
-def _build_response(*, response: httpx.Response) -> Response[List[FilePath]]:
+def _build_response(*, response: httpx.Response) -> Response[List[SheetLayouts]]:
     return Response(
         status_code=response.status_code,
         content=response.content,
@@ -50,11 +50,11 @@ def _build_response(*, response: httpx.Response) -> Response[List[FilePath]]:
 def sync_detailed(
     *,
     client: Client,
-) -> Response[List[FilePath]]:
-    """Get Name Tag Sheets
+) -> Response[List[SheetLayouts]]:
+    """Get Sheet Layouts
 
     Returns:
-        Response[List[FilePath]]
+        Response[List[SheetLayouts]]
     """
 
     kwargs = _get_kwargs(
@@ -72,11 +72,11 @@ def sync_detailed(
 def sync(
     *,
     client: Client,
-) -> Optional[List[FilePath]]:
-    """Get Name Tag Sheets
+) -> Optional[List[SheetLayouts]]:
+    """Get Sheet Layouts
 
     Returns:
-        Response[List[FilePath]]
+        Response[List[SheetLayouts]]
     """
 
     return sync_detailed(
@@ -87,11 +87,11 @@ def sync(
 async def asyncio_detailed(
     *,
     client: Client,
-) -> Response[List[FilePath]]:
-    """Get Name Tag Sheets
+) -> Response[List[SheetLayouts]]:
+    """Get Sheet Layouts
 
     Returns:
-        Response[List[FilePath]]
+        Response[List[SheetLayouts]]
     """
 
     kwargs = _get_kwargs(
@@ -107,11 +107,11 @@ async def asyncio_detailed(
 async def asyncio(
     *,
     client: Client,
-) -> Optional[List[FilePath]]:
-    """Get Name Tag Sheets
+) -> Optional[List[SheetLayouts]]:
+    """Get Sheet Layouts
 
     Returns:
-        Response[List[FilePath]]
+        Response[List[SheetLayouts]]
     """
 
     return (

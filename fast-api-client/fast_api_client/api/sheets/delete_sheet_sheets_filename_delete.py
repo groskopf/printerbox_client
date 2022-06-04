@@ -4,26 +4,23 @@ import httpx
 
 from ...client import Client
 from ...models.details import Details
+from ...models.file_path import FilePath
 from ...models.http_validation_error import HTTPValidationError
-from ...models.name_tag_sheet_layouts import NameTagSheetLayouts
-from ...models.name_tag_sheet_type import NameTagSheetType
 from ...types import Response
 
 
 def _get_kwargs(
-    name_tag_sheet_type: NameTagSheetType,
+    filename: str,
     *,
     client: Client,
 ) -> Dict[str, Any]:
-    url = "{}/layouts/name_tag_sheets/{name_tag_sheet_type}".format(
-        client.base_url, name_tag_sheet_type=name_tag_sheet_type
-    )
+    url = "{}/sheets/{filename}".format(client.base_url, filename=filename)
 
     headers: Dict[str, str] = client.get_headers()
     cookies: Dict[str, Any] = client.get_cookies()
 
     return {
-        "method": "get",
+        "method": "delete",
         "url": url,
         "headers": headers,
         "cookies": cookies,
@@ -31,9 +28,9 @@ def _get_kwargs(
     }
 
 
-def _parse_response(*, response: httpx.Response) -> Optional[Union[Details, HTTPValidationError, NameTagSheetLayouts]]:
+def _parse_response(*, response: httpx.Response) -> Optional[Union[Details, FilePath, HTTPValidationError]]:
     if response.status_code == 200:
-        response_200 = NameTagSheetLayouts.from_dict(response.json())
+        response_200 = FilePath.from_dict(response.json())
 
         return response_200
     if response.status_code == 404:
@@ -47,7 +44,7 @@ def _parse_response(*, response: httpx.Response) -> Optional[Union[Details, HTTP
     return None
 
 
-def _build_response(*, response: httpx.Response) -> Response[Union[Details, HTTPValidationError, NameTagSheetLayouts]]:
+def _build_response(*, response: httpx.Response) -> Response[Union[Details, FilePath, HTTPValidationError]]:
     return Response(
         status_code=response.status_code,
         content=response.content,
@@ -57,21 +54,21 @@ def _build_response(*, response: httpx.Response) -> Response[Union[Details, HTTP
 
 
 def sync_detailed(
-    name_tag_sheet_type: NameTagSheetType,
+    filename: str,
     *,
     client: Client,
-) -> Response[Union[Details, HTTPValidationError, NameTagSheetLayouts]]:
-    """Get Image
+) -> Response[Union[Details, FilePath, HTTPValidationError]]:
+    """Delete Sheet
 
     Args:
-        name_tag_sheet_type (NameTagSheetType): An enumeration.
+        filename (str):
 
     Returns:
-        Response[Union[Details, HTTPValidationError, NameTagSheetLayouts]]
+        Response[Union[Details, FilePath, HTTPValidationError]]
     """
 
     kwargs = _get_kwargs(
-        name_tag_sheet_type=name_tag_sheet_type,
+        filename=filename,
         client=client,
     )
 
@@ -84,41 +81,41 @@ def sync_detailed(
 
 
 def sync(
-    name_tag_sheet_type: NameTagSheetType,
+    filename: str,
     *,
     client: Client,
-) -> Optional[Union[Details, HTTPValidationError, NameTagSheetLayouts]]:
-    """Get Image
+) -> Optional[Union[Details, FilePath, HTTPValidationError]]:
+    """Delete Sheet
 
     Args:
-        name_tag_sheet_type (NameTagSheetType): An enumeration.
+        filename (str):
 
     Returns:
-        Response[Union[Details, HTTPValidationError, NameTagSheetLayouts]]
+        Response[Union[Details, FilePath, HTTPValidationError]]
     """
 
     return sync_detailed(
-        name_tag_sheet_type=name_tag_sheet_type,
+        filename=filename,
         client=client,
     ).parsed
 
 
 async def asyncio_detailed(
-    name_tag_sheet_type: NameTagSheetType,
+    filename: str,
     *,
     client: Client,
-) -> Response[Union[Details, HTTPValidationError, NameTagSheetLayouts]]:
-    """Get Image
+) -> Response[Union[Details, FilePath, HTTPValidationError]]:
+    """Delete Sheet
 
     Args:
-        name_tag_sheet_type (NameTagSheetType): An enumeration.
+        filename (str):
 
     Returns:
-        Response[Union[Details, HTTPValidationError, NameTagSheetLayouts]]
+        Response[Union[Details, FilePath, HTTPValidationError]]
     """
 
     kwargs = _get_kwargs(
-        name_tag_sheet_type=name_tag_sheet_type,
+        filename=filename,
         client=client,
     )
 
@@ -129,22 +126,22 @@ async def asyncio_detailed(
 
 
 async def asyncio(
-    name_tag_sheet_type: NameTagSheetType,
+    filename: str,
     *,
     client: Client,
-) -> Optional[Union[Details, HTTPValidationError, NameTagSheetLayouts]]:
-    """Get Image
+) -> Optional[Union[Details, FilePath, HTTPValidationError]]:
+    """Delete Sheet
 
     Args:
-        name_tag_sheet_type (NameTagSheetType): An enumeration.
+        filename (str):
 
     Returns:
-        Response[Union[Details, HTTPValidationError, NameTagSheetLayouts]]
+        Response[Union[Details, FilePath, HTTPValidationError]]
     """
 
     return (
         await asyncio_detailed(
-            name_tag_sheet_type=name_tag_sheet_type,
+            filename=filename,
             client=client,
         )
     ).parsed

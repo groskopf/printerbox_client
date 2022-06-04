@@ -1,4 +1,4 @@
-from typing import Any, Dict, Optional, Union
+from typing import Any, Dict, List, Optional, Union
 
 import httpx
 
@@ -6,35 +6,61 @@ from ...client import Client
 from ...models.details import Details
 from ...models.file_path import FilePath
 from ...models.http_validation_error import HTTPValidationError
-from ...models.printer_code import PrinterCode
-from ...types import Response
+from ...models.layout import Layout
+from ...models.name_data import NameData
+from ...models.sheet_type import SheetType
+from ...types import UNSET, Response
 
 
 def _get_kwargs(
-    printer_code: PrinterCode,
-    filename: str,
     *,
     client: Client,
+    json_body: List[NameData],
+    sheet_type: SheetType,
+    layout: Layout,
 ) -> Dict[str, Any]:
-    url = "{}/printers/{printer_code}/{filename}".format(client.base_url, printer_code=printer_code, filename=filename)
+    url = "{}/sheets/".format(client.base_url)
 
     headers: Dict[str, str] = client.get_headers()
     cookies: Dict[str, Any] = client.get_cookies()
 
+    params: Dict[str, Any] = {}
+    json_sheet_type = sheet_type.value
+
+    params["sheet_type"] = json_sheet_type
+
+    json_layout = layout.value
+
+    params["layout"] = json_layout
+
+    params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
+
+    json_json_body = []
+    for json_body_item_data in json_body:
+        json_body_item = json_body_item_data.to_dict()
+
+        json_json_body.append(json_body_item)
+
     return {
-        "method": "delete",
+        "method": "post",
         "url": url,
         "headers": headers,
         "cookies": cookies,
         "timeout": client.get_timeout(),
+        "json": json_json_body,
+        "params": params,
     }
 
 
 def _parse_response(*, response: httpx.Response) -> Optional[Union[Details, FilePath, HTTPValidationError]]:
-    if response.status_code == 200:
-        response_200 = FilePath.from_dict(response.json())
+    if response.status_code == 201:
+        response_201 = FilePath.from_dict(response.json())
 
-        return response_200
+        return response_201
+    if response.status_code == 400:
+        response_400 = Details.from_dict(response.json())
+
+        return response_400
     if response.status_code == 404:
         response_404 = Details.from_dict(response.json())
 
@@ -56,25 +82,28 @@ def _build_response(*, response: httpx.Response) -> Response[Union[Details, File
 
 
 def sync_detailed(
-    printer_code: PrinterCode,
-    filename: str,
     *,
     client: Client,
+    json_body: List[NameData],
+    sheet_type: SheetType,
+    layout: Layout,
 ) -> Response[Union[Details, FilePath, HTTPValidationError]]:
-    """Delete Name Tag
+    """New Sheet
 
     Args:
-        printer_code (PrinterCode): An enumeration.
-        filename (str):
+        sheet_type (SheetType): An enumeration.
+        layout (Layout): An enumeration.
+        json_body (List[NameData]):
 
     Returns:
         Response[Union[Details, FilePath, HTTPValidationError]]
     """
 
     kwargs = _get_kwargs(
-        printer_code=printer_code,
-        filename=filename,
         client=client,
+        json_body=json_body,
+        sheet_type=sheet_type,
+        layout=layout,
     )
 
     response = httpx.request(
@@ -86,48 +115,54 @@ def sync_detailed(
 
 
 def sync(
-    printer_code: PrinterCode,
-    filename: str,
     *,
     client: Client,
+    json_body: List[NameData],
+    sheet_type: SheetType,
+    layout: Layout,
 ) -> Optional[Union[Details, FilePath, HTTPValidationError]]:
-    """Delete Name Tag
+    """New Sheet
 
     Args:
-        printer_code (PrinterCode): An enumeration.
-        filename (str):
+        sheet_type (SheetType): An enumeration.
+        layout (Layout): An enumeration.
+        json_body (List[NameData]):
 
     Returns:
         Response[Union[Details, FilePath, HTTPValidationError]]
     """
 
     return sync_detailed(
-        printer_code=printer_code,
-        filename=filename,
         client=client,
+        json_body=json_body,
+        sheet_type=sheet_type,
+        layout=layout,
     ).parsed
 
 
 async def asyncio_detailed(
-    printer_code: PrinterCode,
-    filename: str,
     *,
     client: Client,
+    json_body: List[NameData],
+    sheet_type: SheetType,
+    layout: Layout,
 ) -> Response[Union[Details, FilePath, HTTPValidationError]]:
-    """Delete Name Tag
+    """New Sheet
 
     Args:
-        printer_code (PrinterCode): An enumeration.
-        filename (str):
+        sheet_type (SheetType): An enumeration.
+        layout (Layout): An enumeration.
+        json_body (List[NameData]):
 
     Returns:
         Response[Union[Details, FilePath, HTTPValidationError]]
     """
 
     kwargs = _get_kwargs(
-        printer_code=printer_code,
-        filename=filename,
         client=client,
+        json_body=json_body,
+        sheet_type=sheet_type,
+        layout=layout,
     )
 
     async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
@@ -137,16 +172,18 @@ async def asyncio_detailed(
 
 
 async def asyncio(
-    printer_code: PrinterCode,
-    filename: str,
     *,
     client: Client,
+    json_body: List[NameData],
+    sheet_type: SheetType,
+    layout: Layout,
 ) -> Optional[Union[Details, FilePath, HTTPValidationError]]:
-    """Delete Name Tag
+    """New Sheet
 
     Args:
-        printer_code (PrinterCode): An enumeration.
-        filename (str):
+        sheet_type (SheetType): An enumeration.
+        layout (Layout): An enumeration.
+        json_body (List[NameData]):
 
     Returns:
         Response[Union[Details, FilePath, HTTPValidationError]]
@@ -154,8 +191,9 @@ async def asyncio(
 
     return (
         await asyncio_detailed(
-            printer_code=printer_code,
-            filename=filename,
             client=client,
+            json_body=json_body,
+            sheet_type=sheet_type,
+            layout=layout,
         )
     ).parsed

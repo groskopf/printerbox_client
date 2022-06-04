@@ -14,7 +14,7 @@ def _get_kwargs(
     *,
     client: Client,
 ) -> Dict[str, Any]:
-    url = "{}/printers/{printer_code}".format(client.base_url, printer_code=printer_code)
+    url = "{}/name_tags/{printer_code}".format(client.base_url, printer_code=printer_code)
 
     headers: Dict[str, str] = client.get_headers()
     cookies: Dict[str, Any] = client.get_cookies()
