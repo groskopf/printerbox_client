@@ -7,7 +7,7 @@ from asyncio import sleep
 from blink import blinkOff
 from fast_api_client.models.booking import Booking
 from fast_api_client.models.printer_code import PrinterCode
-from printerbox import PrinterBox
+from printerbox import PrinterBox, PrinterboxConfig
 
 
 def printWS(message: str):
@@ -17,8 +17,8 @@ def printWS(message: str):
 
 def loadPrinterConfig():
     with open('config/printerbox_config.json') as config_file:
-        config = json.load(config_file)
-        return config['config']
+        configDict = json.load(config_file)['config']
+        return  PrinterboxConfig(**configDict)
 
 
 
@@ -50,19 +50,16 @@ apiUrl = 'api.printerboks.dk/api/v1'
 
 if __name__ == "__main__":
 
+    blinkOff()
+    print("Started")
 
     config = loadPrinterConfig()
 
-
-
     # TODO Should we do some getting async? We might fail printing and then not delete files we have received on WS
 
-    #    blinkOff()
 
-    print("Started")
 
-    printerCode = config['boxid'] + '_' + config['number']
-    printerBox = PrinterBox(apiUrl, printerCode, disablePrinting=config['disable_printing'])
+    printerBox = PrinterBox(apiUrl, config)
 
     booking : Booking = None
     while not printerBox.getBooking():
@@ -70,7 +67,7 @@ if __name__ == "__main__":
 
     websocket.enableTrace(traceWebSocket)
     # ws = websocket.WebSocketApp(f"ws://{apiUrl}/printers/{booking.printer_code}/ws",
-    wsApp = websocket.WebSocketApp(f'wss://{apiUrl}/name_tags/{printerCode}/ws',
+    wsApp = websocket.WebSocketApp(f'wss://{apiUrl}/name_tags/{printerBox.printerCode}/ws',
                                 on_open=onWSOpen,
                                 on_message=onWSMessage,
                                 on_error=onWSError,

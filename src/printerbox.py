@@ -5,6 +5,8 @@ import time
 from datetime import date as date
 from xmlrpc.client import Boolean
 
+from pydantic import BaseModel
+
 from blink import blinkBlue, blinkMagenta, blinkRed
 from fast_api_client import Client
 from fast_api_client.models.booking import Booking
@@ -12,19 +14,24 @@ from fast_api_client.models.printer_code import PrinterCode
 from fast_api_client.api.name_tags import get_name_tag_name_tags_printer_code_filename_get, delete_name_tag_name_tags_printer_code_filename_delete
 from fast_api_client.api.bookings import get_bookings_bookings_get
 
-
+class PrinterboxConfig(BaseModel):
+    box_id : str
+    number: str
+    printing_disabled : Boolean
+    access_token : str
+    
 class PrinterBox:
 
     client: Client
     printerCode: PrinterCode
     debugPrinter = True
     booking: Booking
-    disablePrinting: Boolean = False
+    printingDisabled: Boolean = False
 
-    def __init__(self, apiUrl: str,  printerCode: PrinterCode, disablePrinting : Boolean):
+    def __init__(self, apiUrl: str,  config : PrinterboxConfig):
         self.client = Client(base_url=f"https://{apiUrl}")
-        self.printerCode = printerCode
-        self.disablePrinting = disablePrinting
+        self.printerCode = PrinterCode(config.box_id + '_' + config.number)
+        self.printingDisabled = config.printing_disabled
 
     def getBooking(self):
         today = date.today()  # FIXME today is not working correctly
@@ -66,7 +73,7 @@ class PrinterBox:
 
     def __printFile(self, filename, labelname):
         print("Printing: " + filename)
-        if self.disablePrinting:
+        if self.printingDisabled:
             print("Printing disabled")
             return True
 
