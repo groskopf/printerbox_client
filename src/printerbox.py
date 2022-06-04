@@ -3,14 +3,14 @@ import os
 import json
 import time
 from datetime import date as date
+from xmlrpc.client import Boolean
 
-from blink import blinkBlue, blinkMagenta, blinkRed
+from src.blink import blinkBlue, blinkMagenta, blinkRed
 from fast_api_client import Client
 from fast_api_client.models.booking import Booking
-from fast_api_client.models.name_tag_type import NameTagType
 from fast_api_client.models.printer_code import PrinterCode
-from fast_api_client.api.printers import get_name_tag_printers_printer_code_filename_get, delete_name_tag_printers_printer_code_filename_delete
-from fast_api_client.api.admin import get_bookings_bookings_get
+from fast_api_client.api.name_tags import get_name_tag_name_tags_printer_code_filename_get, delete_name_tag_name_tags_printer_code_filename_delete
+from fast_api_client.api.bookings import get_bookings_bookings_get
 
 
 class PrinterBox:
@@ -19,15 +19,16 @@ class PrinterBox:
     printerCode: PrinterCode
     debugPrinter = True
     booking: Booking
+    disablePrinting: Boolean = False
 
-    def __init__(self, apiUrl: str,  printerCode: PrinterCode):
+    def __init__(self, apiUrl: str,  printerCode: PrinterCode, disablePrinting : Boolean):
         self.client = Client(base_url=f"https://{apiUrl}")
         self.printerCode = printerCode
+        self.disablePrinting = disablePrinting
 
     def getBooking(self):
         today = date.today()  # FIXME today is not working correctly
         for booking in get_bookings_bookings_get.sync(client=self.client):
-            # We don't have the full printer code
             if booking.printer_code == self.printerCode:
                 if booking.start_date <= today and today <= booking.end_date:
                     print(f"Booking: {booking}")
@@ -53,26 +54,28 @@ class PrinterBox:
         blinkBlue()
         self.__deleteFile(filename)
 
-        delete_name_tag_printers_printer_code_filename_delete.sync(client=self.client,
+        delete_name_tag_name_tags_printer_code_filename_delete.sync(client=self.client,
                                                                    printer_code=self.printerCode,
                                                                    filename=filename)
 
     def __downloadFile(self, filename: str):
         self.printPB("downloadFile({filename})")
-        return get_name_tag_printers_printer_code_filename_get.sync_detailed(client=self.client,
+        return get_name_tag_name_tags_printer_code_filename_get.sync_detailed(client=self.client,
                                                                              printer_code=self.printerCode,
                                                                              filename=filename)
 
     def __printFile(self, filename, labelname):
-        self.printPB(f"printFile({filename})")
         print("Printing: " + filename)
-        # media = 'media=' + labelname
-        # printCmd = ['lp', '-d', 'TD4550DNWB', '-h', 'printerbox_sortkaffe_cupsd_1',
-        #             '-o', media, '-o', 'BrTrimtape=OFF', filename]
-        # self.printPB(printCmd)
-        # output = subprocess.run(printCmd, capture_output=False)
-        # return output.returncode == 0
-        return True
+        if self.disablePrinting:
+            print("Printing disabled")
+            return True
+
+        media = 'media=' + labelname
+        printCmd = ['lp', '-d', 'TD4550DNWB', '-h', 'printerbox_sortkaffe_cupsd_1',
+                    '-o', media, '-o', 'BrTrimtape=OFF', filename]
+        self.printPB(printCmd)
+        output = subprocess.run(printCmd, capture_output=False)
+        return output.returncode == 0
 
     def printPB(self, message: str):
         if self.debugPrinter:

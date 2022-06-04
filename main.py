@@ -4,10 +4,10 @@ import rel
 import json
 from asyncio import sleep
 
-from blink import blinkOff
+from src.blink import blinkOff
 from fast_api_client.models.booking import Booking
 from fast_api_client.models.printer_code import PrinterCode
-from printerbox import PrinterBox
+from src.printerbox import PrinterBox
 
 
 def printWS(message: str):
@@ -16,7 +16,7 @@ def printWS(message: str):
 
 
 def loadPrinterConfig():
-    with open('/config/printerbox_config.json') as config_file:
+    with open('config/printerbox_config.json') as config_file:
         config = json.load(config_file)
         return config['config']
 
@@ -62,7 +62,7 @@ if __name__ == "__main__":
     print("Started")
 
     printerCode = config['boxid'] + '_' + config['number']
-    printerBox = PrinterBox(apiUrl, printerCode)
+    printerBox = PrinterBox(apiUrl, printerCode, disablePrinting=config['disable_printing'])
 
     booking : Booking = None
     while not printerBox.getBooking():
@@ -70,7 +70,7 @@ if __name__ == "__main__":
 
     websocket.enableTrace(traceWebSocket)
     # ws = websocket.WebSocketApp(f"ws://{apiUrl}/printers/{booking.printer_code}/ws",
-    wsApp = websocket.WebSocketApp(f"wss://{apiUrl}/printers/XDESP95271_p/ws",
+    wsApp = websocket.WebSocketApp(f'wss://{apiUrl}/name_tags/{printerCode}/ws',
                                 on_open=onWSOpen,
                                 on_message=onWSMessage,
                                 on_error=onWSError,
