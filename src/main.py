@@ -4,10 +4,10 @@ import rel
 import json
 from asyncio import sleep
 
-from src.blink import blinkOff
+from blink import blinkOff
 from fast_api_client.models.booking import Booking
 from fast_api_client.models.printer_code import PrinterCode
-from src.printerbox import PrinterBox
+from printerbox import PrinterBox
 
 
 def printWS(message: str):

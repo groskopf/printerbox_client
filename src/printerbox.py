@@ -5,7 +5,7 @@ import time
 from datetime import date as date
 from xmlrpc.client import Boolean
 
-from src.blink import blinkBlue, blinkMagenta, blinkRed
+from blink import blinkBlue, blinkMagenta, blinkRed
 from fast_api_client import Client
 from fast_api_client.models.booking import Booking
 from fast_api_client.models.printer_code import PrinterCode
