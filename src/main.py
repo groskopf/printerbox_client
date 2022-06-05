@@ -65,6 +65,8 @@ if __name__ == "__main__":
     while not printerBox.getBooking():
         sleep(10) 
 
+    printerBox.readLabelFile()
+
     websocket.enableTrace(traceWebSocket)
     # ws = websocket.WebSocketApp(f"ws://{apiUrl}/printers/{booking.printer_code}/ws",
     wsApp = websocket.WebSocketApp(f'wss://{apiUrl}/name_tags/{printerBox.printerCode}/ws',

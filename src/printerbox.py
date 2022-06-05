@@ -19,6 +19,7 @@ class PrinterboxConfig(BaseModel):
     number: str
     printing_disabled : Boolean
     access_token : str
+    printer_server : str
     
 class PrinterBox:
 
@@ -27,11 +28,13 @@ class PrinterBox:
     debugPrinter = True
     booking: Booking
     printingDisabled: Boolean = False
+    printer_label_code : str
 
     def __init__(self, apiUrl: str,  config : PrinterboxConfig):
         self.client = Client(base_url=f"https://{apiUrl}")
         self.printerCode = PrinterCode(config.box_id + '_' + config.number)
         self.printingDisabled = config.printing_disabled
+        self.printerServer = config.printer_server
 
     def getBooking(self):
         today = date.today()  # FIXME today is not working correctly
@@ -42,6 +45,14 @@ class PrinterBox:
                     self.booking = booking
                     return True
         return False
+
+    def readLabelFile(self):
+        try:
+            with open('/labels/' + self.booking.name_tag_type + '.txt', 'rt') as labelFile:
+                labelName = labelFile.readline()
+                self.printer_label_code = labelName.strip()
+        except:
+           return None
 
     def newMessage(self, message: str):
         filePath = json.loads(message)
@@ -55,12 +66,12 @@ class PrinterBox:
 
         self.__saveFile(filename, nameTagPdf.content)
 
-        if not self.__printFile(filename, self.booking.name_tag_type):
-            self.blinkMagenta()
+        if self.__printFile(filename):
+            blinkBlue()
+        else:
+            blinkMagenta()
 
-        blinkBlue()
         self.__deleteFile(filename)
-
         delete_name_tag_name_tags_printer_code_filename_delete.sync(client=self.client,
                                                                    printer_code=self.printerCode,
                                                                    filename=filename)
@@ -71,14 +82,14 @@ class PrinterBox:
                                                                              printer_code=self.printerCode,
                                                                              filename=filename)
 
-    def __printFile(self, filename, labelname):
+    def __printFile(self, filename):
         print("Printing: " + filename)
         if self.printingDisabled:
             print("Printing disabled")
             return True
 
-        media = 'media=' + labelname
-        printCmd = ['lp', '-d', 'TD4550DNWB', '-h', 'printerbox_sortkaffe_cupsd_1',
+        media = 'media=' + self.printer_label_code
+        printCmd = ['lp', '-d', 'TD4550DNWB', '-h', self.printerServer,
                     '-o', media, '-o', 'BrTrimtape=OFF', filename]
         self.printPB(printCmd)
         output = subprocess.run(printCmd, capture_output=False)
