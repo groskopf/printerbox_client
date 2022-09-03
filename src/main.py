@@ -5,6 +5,7 @@ import json
 from asyncio import sleep
 
 from blink import blinkOff
+from blink import ledGreen
 from fast_api_client.models.booking import Booking
 from fast_api_client.models.printer_code import PrinterCode
 from printerbox import PrinterBox, PrinterboxConfig
@@ -63,7 +64,9 @@ if __name__ == "__main__":
 
     booking : Booking = None
     while not printerBox.getBooking():
-        sleep(10) 
+        sleep(5) 
+
+    ledGreen()
 
     printerBox.readLabelFile()
 
