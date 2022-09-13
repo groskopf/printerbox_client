@@ -2,14 +2,14 @@ from typing import Any, Dict, List, Optional
 
 import httpx
 
-from ...client import Client
+from ...client import AuthenticatedClient
 from ...models.booking import Booking
 from ...types import Response
 
 
 def _get_kwargs(
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Dict[str, Any]:
     url = "{}/bookings/".format(client.base_url)
 
@@ -49,7 +49,7 @@ def _build_response(*, response: httpx.Response) -> Response[List[Booking]]:
 
 def sync_detailed(
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[List[Booking]]:
     """Get Bookings
 
@@ -71,7 +71,7 @@ def sync_detailed(
 
 def sync(
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[List[Booking]]:
     """Get Bookings
 
@@ -86,7 +86,7 @@ def sync(
 
 async def asyncio_detailed(
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[List[Booking]]:
     """Get Bookings
 
@@ -106,7 +106,7 @@ async def asyncio_detailed(
 
 async def asyncio(
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[List[Booking]]:
     """Get Bookings
 

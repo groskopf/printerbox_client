@@ -2,7 +2,7 @@ from typing import Any, Dict, Optional, Union, cast
 
 import httpx
 
-from ...client import Client
+from ...client import AuthenticatedClient
 from ...models.details import Details
 from ...models.http_validation_error import HTTPValidationError
 from ...models.printer_code import PrinterCode
@@ -13,7 +13,7 @@ def _get_kwargs(
     printer_code: PrinterCode,
     filename: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Dict[str, Any]:
     url = "{}/name_tags/{printer_code}/{filename}".format(client.base_url, printer_code=printer_code, filename=filename)
 
@@ -57,7 +57,7 @@ def sync_detailed(
     printer_code: PrinterCode,
     filename: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[Union[Any, Details, HTTPValidationError]]:
     """Get Name Tag
 
@@ -87,7 +87,7 @@ def sync(
     printer_code: PrinterCode,
     filename: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[Union[Any, Details, HTTPValidationError]]:
     """Get Name Tag
 
@@ -110,7 +110,7 @@ async def asyncio_detailed(
     printer_code: PrinterCode,
     filename: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[Union[Any, Details, HTTPValidationError]]:
     """Get Name Tag
 
@@ -138,7 +138,7 @@ async def asyncio(
     printer_code: PrinterCode,
     filename: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[Union[Any, Details, HTTPValidationError]]:
     """Get Name Tag
 

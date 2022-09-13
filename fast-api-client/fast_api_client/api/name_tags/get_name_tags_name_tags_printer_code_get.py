@@ -2,7 +2,7 @@ from typing import Any, Dict, List, Optional, Union
 
 import httpx
 
-from ...client import Client
+from ...client import AuthenticatedClient
 from ...models.file_path import FilePath
 from ...models.http_validation_error import HTTPValidationError
 from ...models.printer_code import PrinterCode
@@ -12,7 +12,7 @@ from ...types import Response
 def _get_kwargs(
     printer_code: PrinterCode,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Dict[str, Any]:
     url = "{}/name_tags/{printer_code}".format(client.base_url, printer_code=printer_code)
 
@@ -57,7 +57,7 @@ def _build_response(*, response: httpx.Response) -> Response[Union[HTTPValidatio
 def sync_detailed(
     printer_code: PrinterCode,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[Union[HTTPValidationError, List[FilePath]]]:
     """Get Name Tags
 
@@ -84,7 +84,7 @@ def sync_detailed(
 def sync(
     printer_code: PrinterCode,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[Union[HTTPValidationError, List[FilePath]]]:
     """Get Name Tags
 
@@ -104,7 +104,7 @@ def sync(
 async def asyncio_detailed(
     printer_code: PrinterCode,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[Union[HTTPValidationError, List[FilePath]]]:
     """Get Name Tags
 
@@ -129,7 +129,7 @@ async def asyncio_detailed(
 async def asyncio(
     printer_code: PrinterCode,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[Union[HTTPValidationError, List[FilePath]]]:
     """Get Name Tags
 

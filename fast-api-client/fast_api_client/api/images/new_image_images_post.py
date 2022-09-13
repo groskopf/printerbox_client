@@ -2,7 +2,7 @@ from typing import Any, Dict, Optional, Union
 
 import httpx
 
-from ...client import Client
+from ...client import AuthenticatedClient
 from ...models.body_new_image_images_post import BodyNewImageImagesPost
 from ...models.file_path import FilePath
 from ...models.http_validation_error import HTTPValidationError
@@ -11,7 +11,7 @@ from ...types import Response
 
 def _get_kwargs(
     *,
-    client: Client,
+    client: AuthenticatedClient,
     multipart_data: BodyNewImageImagesPost,
 ) -> Dict[str, Any]:
     url = "{}/images/".format(client.base_url)
@@ -54,7 +54,7 @@ def _build_response(*, response: httpx.Response) -> Response[Union[FilePath, HTT
 
 def sync_detailed(
     *,
-    client: Client,
+    client: AuthenticatedClient,
     multipart_data: BodyNewImageImagesPost,
 ) -> Response[Union[FilePath, HTTPValidationError]]:
     """New Image
@@ -81,7 +81,7 @@ def sync_detailed(
 
 def sync(
     *,
-    client: Client,
+    client: AuthenticatedClient,
     multipart_data: BodyNewImageImagesPost,
 ) -> Optional[Union[FilePath, HTTPValidationError]]:
     """New Image
@@ -101,7 +101,7 @@ def sync(
 
 async def asyncio_detailed(
     *,
-    client: Client,
+    client: AuthenticatedClient,
     multipart_data: BodyNewImageImagesPost,
 ) -> Response[Union[FilePath, HTTPValidationError]]:
     """New Image
@@ -126,7 +126,7 @@ async def asyncio_detailed(
 
 async def asyncio(
     *,
-    client: Client,
+    client: AuthenticatedClient,
     multipart_data: BodyNewImageImagesPost,
 ) -> Optional[Union[FilePath, HTTPValidationError]]:
     """New Image

@@ -2,7 +2,7 @@ from typing import Any, Dict, Optional, Union
 
 import httpx
 
-from ...client import Client
+from ...client import AuthenticatedClient
 from ...models.booking import Booking
 from ...models.details import Details
 from ...models.http_validation_error import HTTPValidationError
@@ -12,7 +12,7 @@ from ...types import Response
 def _get_kwargs(
     booking_code: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Dict[str, Any]:
     url = "{}/bookings/{booking_code}".format(client.base_url, booking_code=booking_code)
 
@@ -56,7 +56,7 @@ def _build_response(*, response: httpx.Response) -> Response[Union[Booking, Deta
 def sync_detailed(
     booking_code: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[Union[Booking, Details, HTTPValidationError]]:
     """Get Booking
 
@@ -83,7 +83,7 @@ def sync_detailed(
 def sync(
     booking_code: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[Union[Booking, Details, HTTPValidationError]]:
     """Get Booking
 
@@ -103,7 +103,7 @@ def sync(
 async def asyncio_detailed(
     booking_code: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[Union[Booking, Details, HTTPValidationError]]:
     """Get Booking
 
@@ -128,7 +128,7 @@ async def asyncio_detailed(
 async def asyncio(
     booking_code: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[Union[Booking, Details, HTTPValidationError]]:
     """Get Booking
 

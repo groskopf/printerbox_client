@@ -2,7 +2,7 @@ from typing import Any, Dict, Optional, Union
 
 import httpx
 
-from ...client import Client
+from ...client import AuthenticatedClient
 from ...models.details import Details
 from ...models.file_path import FilePath
 from ...models.http_validation_error import HTTPValidationError
@@ -12,7 +12,7 @@ from ...types import Response
 def _get_kwargs(
     filename: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Dict[str, Any]:
     url = "{}/images/{filename}".format(client.base_url, filename=filename)
 
@@ -56,7 +56,7 @@ def _build_response(*, response: httpx.Response) -> Response[Union[Details, File
 def sync_detailed(
     filename: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[Union[Details, FilePath, HTTPValidationError]]:
     """Delete Image
 
@@ -83,7 +83,7 @@ def sync_detailed(
 def sync(
     filename: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[Union[Details, FilePath, HTTPValidationError]]:
     """Delete Image
 
@@ -103,7 +103,7 @@ def sync(
 async def asyncio_detailed(
     filename: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[Union[Details, FilePath, HTTPValidationError]]:
     """Delete Image
 
@@ -128,7 +128,7 @@ async def asyncio_detailed(
 async def asyncio(
     filename: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[Union[Details, FilePath, HTTPValidationError]]:
     """Delete Image
 

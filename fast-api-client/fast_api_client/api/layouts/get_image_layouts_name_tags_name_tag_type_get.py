@@ -2,7 +2,7 @@ from typing import Any, Dict, Optional, Union
 
 import httpx
 
-from ...client import Client
+from ...client import AuthenticatedClient
 from ...models.details import Details
 from ...models.http_validation_error import HTTPValidationError
 from ...models.name_tag_layouts import NameTagLayouts
@@ -13,7 +13,7 @@ from ...types import Response
 def _get_kwargs(
     name_tag_type: NameTagType,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Dict[str, Any]:
     url = "{}/layouts/name_tags/{name_tag_type}".format(client.base_url, name_tag_type=name_tag_type)
 
@@ -57,7 +57,7 @@ def _build_response(*, response: httpx.Response) -> Response[Union[Details, HTTP
 def sync_detailed(
     name_tag_type: NameTagType,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[Union[Details, HTTPValidationError, NameTagLayouts]]:
     """Get Image
 
@@ -84,7 +84,7 @@ def sync_detailed(
 def sync(
     name_tag_type: NameTagType,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[Union[Details, HTTPValidationError, NameTagLayouts]]:
     """Get Image
 
@@ -104,7 +104,7 @@ def sync(
 async def asyncio_detailed(
     name_tag_type: NameTagType,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[Union[Details, HTTPValidationError, NameTagLayouts]]:
     """Get Image
 
@@ -129,7 +129,7 @@ async def asyncio_detailed(
 async def asyncio(
     name_tag_type: NameTagType,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[Union[Details, HTTPValidationError, NameTagLayouts]]:
     """Get Image
 

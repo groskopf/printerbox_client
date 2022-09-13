@@ -3,7 +3,7 @@ from typing import Any, Dict, Optional, Union
 
 import httpx
 
-from ...client import Client
+from ...client import AuthenticatedClient
 from ...models.booking import Booking
 from ...models.details import Details
 from ...models.http_validation_error import HTTPValidationError
@@ -15,7 +15,7 @@ from ...types import UNSET, Response
 def _get_kwargs(
     booking_code: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     start_date: datetime.date,
     end_date: datetime.date,
     printer_code: PrinterCode,
@@ -81,7 +81,7 @@ def _build_response(*, response: httpx.Response) -> Response[Union[Booking, Deta
 def sync_detailed(
     booking_code: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     start_date: datetime.date,
     end_date: datetime.date,
     printer_code: PrinterCode,
@@ -120,7 +120,7 @@ def sync_detailed(
 def sync(
     booking_code: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     start_date: datetime.date,
     end_date: datetime.date,
     printer_code: PrinterCode,
@@ -152,7 +152,7 @@ def sync(
 async def asyncio_detailed(
     booking_code: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     start_date: datetime.date,
     end_date: datetime.date,
     printer_code: PrinterCode,
@@ -189,7 +189,7 @@ async def asyncio_detailed(
 async def asyncio(
     booking_code: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
     start_date: datetime.date,
     end_date: datetime.date,
     printer_code: PrinterCode,

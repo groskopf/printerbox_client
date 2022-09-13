@@ -2,7 +2,7 @@ from typing import Any, Dict, Optional, Union
 
 import httpx
 
-from ...client import Client
+from ...client import AuthenticatedClient
 from ...models.details import Details
 from ...models.file_path import FilePath
 from ...models.http_validation_error import HTTPValidationError
@@ -13,7 +13,7 @@ from ...types import UNSET, Response
 
 def _get_kwargs(
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: NameData,
     booking_code: str,
     layout: Layout,
@@ -76,7 +76,7 @@ def _build_response(*, response: httpx.Response) -> Response[Union[Details, File
 
 def sync_detailed(
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: NameData,
     booking_code: str,
     layout: Layout,
@@ -109,7 +109,7 @@ def sync_detailed(
 
 def sync(
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: NameData,
     booking_code: str,
     layout: Layout,
@@ -135,7 +135,7 @@ def sync(
 
 async def asyncio_detailed(
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: NameData,
     booking_code: str,
     layout: Layout,
@@ -166,7 +166,7 @@ async def asyncio_detailed(
 
 async def asyncio(
     *,
-    client: Client,
+    client: AuthenticatedClient,
     json_body: NameData,
     booking_code: str,
     layout: Layout,

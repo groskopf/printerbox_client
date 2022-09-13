@@ -2,14 +2,14 @@ from typing import Any, Dict, List, Optional
 
 import httpx
 
-from ...client import Client
+from ...client import AuthenticatedClient
 from ...models.sheet_layouts import SheetLayouts
 from ...types import Response
 
 
 def _get_kwargs(
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Dict[str, Any]:
     url = "{}/layouts/sheets".format(client.base_url)
 
@@ -49,7 +49,7 @@ def _build_response(*, response: httpx.Response) -> Response[List[SheetLayouts]]
 
 def sync_detailed(
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[List[SheetLayouts]]:
     """Get Sheet Layouts
 
@@ -71,7 +71,7 @@ def sync_detailed(
 
 def sync(
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[List[SheetLayouts]]:
     """Get Sheet Layouts
 
@@ -86,7 +86,7 @@ def sync(
 
 async def asyncio_detailed(
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[List[SheetLayouts]]:
     """Get Sheet Layouts
 
@@ -106,7 +106,7 @@ async def asyncio_detailed(
 
 async def asyncio(
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[List[SheetLayouts]]:
     """Get Sheet Layouts
 

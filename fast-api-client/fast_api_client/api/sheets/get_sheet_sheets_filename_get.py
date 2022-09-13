@@ -2,7 +2,7 @@ from typing import Any, Dict, Optional, Union, cast
 
 import httpx
 
-from ...client import Client
+from ...client import AuthenticatedClient
 from ...models.details import Details
 from ...models.http_validation_error import HTTPValidationError
 from ...types import Response
@@ -11,7 +11,7 @@ from ...types import Response
 def _get_kwargs(
     filename: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Dict[str, Any]:
     url = "{}/sheets/{filename}".format(client.base_url, filename=filename)
 
@@ -54,7 +54,7 @@ def _build_response(*, response: httpx.Response) -> Response[Union[Any, Details,
 def sync_detailed(
     filename: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[Union[Any, Details, HTTPValidationError]]:
     """Get Sheet
 
@@ -81,7 +81,7 @@ def sync_detailed(
 def sync(
     filename: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[Union[Any, Details, HTTPValidationError]]:
     """Get Sheet
 
@@ -101,7 +101,7 @@ def sync(
 async def asyncio_detailed(
     filename: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[Union[Any, Details, HTTPValidationError]]:
     """Get Sheet
 
@@ -126,7 +126,7 @@ async def asyncio_detailed(
 async def asyncio(
     filename: str,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[Union[Any, Details, HTTPValidationError]]:
     """Get Sheet
 

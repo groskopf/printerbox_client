@@ -2,7 +2,7 @@ from typing import Any, Dict, Optional, Union
 
 import httpx
 
-from ...client import Client
+from ...client import AuthenticatedClient
 from ...models.details import Details
 from ...models.http_validation_error import HTTPValidationError
 from ...models.sheet_layouts import SheetLayouts
@@ -13,7 +13,7 @@ from ...types import Response
 def _get_kwargs(
     sheet_type: SheetType,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Dict[str, Any]:
     url = "{}/layouts/sheets/{sheet_type}".format(client.base_url, sheet_type=sheet_type)
 
@@ -57,7 +57,7 @@ def _build_response(*, response: httpx.Response) -> Response[Union[Details, HTTP
 def sync_detailed(
     sheet_type: SheetType,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[Union[Details, HTTPValidationError, SheetLayouts]]:
     """Get Image
 
@@ -84,7 +84,7 @@ def sync_detailed(
 def sync(
     sheet_type: SheetType,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[Union[Details, HTTPValidationError, SheetLayouts]]:
     """Get Image
 
@@ -104,7 +104,7 @@ def sync(
 async def asyncio_detailed(
     sheet_type: SheetType,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Response[Union[Details, HTTPValidationError, SheetLayouts]]:
     """Get Image
 
@@ -129,7 +129,7 @@ async def asyncio_detailed(
 async def asyncio(
     sheet_type: SheetType,
     *,
-    client: Client,
+    client: AuthenticatedClient,
 ) -> Optional[Union[Details, HTTPValidationError, SheetLayouts]]:
     """Get Image
 

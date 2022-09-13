@@ -22,6 +22,7 @@ class ValidationError:
     def to_dict(self) -> Dict[str, Any]:
         loc = []
         for loc_item_data in self.loc:
+            loc_item: Union[int, str]
 
             loc_item = loc_item_data
 
