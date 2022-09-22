@@ -8,43 +8,51 @@ from xmlrpc.client import Boolean
 from pydantic import BaseModel
 
 from blink import blinkBlue, blinkMagenta, blinkRed
-from fast_api_client import Client
+from fast_api_client import AuthenticatedClient
 from fast_api_client.models.booking import Booking
 from fast_api_client.models.printer_code import PrinterCode
-from fast_api_client.api.name_tags import get_name_tag_name_tags_printer_code_filename_get, delete_name_tag_name_tags_printer_code_filename_delete
-from fast_api_client.api.bookings import get_bookings_bookings_get
+from fast_api_client.api.name_tags import get_name_tag_name_tags_booking_code_filename_get, delete_name_tag_name_tags_booking_code_filename_delete
+from fast_api_client.api.bookings import get_bookings_bookings_get, get_bookings_bookings_printer_printer_code_get
+
 
 class PrinterboxConfig(BaseModel):
-    box_id : str
+    box_id: str
     number: str
-    printing_disabled : Boolean
-    access_token : str
-    printer_server : str
-    
+    printing_disabled: Boolean
+    access_token: str
+    printer_server: str
+
+
 class PrinterBox:
 
-    client: Client
+    client: AuthenticatedClient
     printerCode: PrinterCode
     debugPrinter = True
     booking: Booking
     printingDisabled: Boolean = False
-    printer_label_code : str
+    printer_label_code: str
 
-    def __init__(self, apiUrl: str,  config : PrinterboxConfig):
-        self.client = Client(base_url=f"https://{apiUrl}")
+    def __init__(self, apiUrl: str,  config: PrinterboxConfig):
+        self.client = AuthenticatedClient(
+            base_url=f"{apiUrl}",
+            token=config.access_token,
+            prefix=None,
+            auth_header_name="access_token")
         self.printerCode = PrinterCode(config.box_id + '_' + config.number)
         self.printingDisabled = config.printing_disabled
         self.printerServer = config.printer_server
 
     def getBooking(self):
-        today = date.today()  # FIXME today is not working correctly
-        for booking in get_bookings_bookings_get.sync(client=self.client):
-            if booking.printer_code == self.printerCode:
-                if booking.start_date <= today and today <= booking.end_date:
-                    print(f"Booking: {booking}")
-                    self.booking = booking
-                    return True
-        return False
+        try:
+            self.booking = get_bookings_bookings_printer_printer_code_get.sync(
+                printer_code=self.printerCode,
+                client=self.client)
+            if self.booking:
+                return True
+        except:
+            pass
+
+        return None
 
     def readLabelFile(self):
         try:
@@ -52,7 +60,7 @@ class PrinterBox:
                 labelName = labelFile.readline()
                 self.printer_label_code = labelName.strip()
         except:
-           return None
+            return None
 
     def newMessage(self, message: str):
         filePath = json.loads(message)
@@ -72,15 +80,15 @@ class PrinterBox:
             blinkMagenta()
 
         self.__deleteFile(filename)
-        delete_name_tag_name_tags_printer_code_filename_delete.sync(client=self.client,
-                                                                   printer_code=self.printerCode,
-                                                                   filename=filename)
+        delete_name_tag_name_tags_booking_code_filename_delete.sync(client=self.client,
+                                                                    booking_code=self.booking.booking_code,
+                                                                    filename=filename)
 
     def __downloadFile(self, filename: str):
         self.printPB("downloadFile({filename})")
-        return get_name_tag_name_tags_printer_code_filename_get.sync_detailed(client=self.client,
-                                                                             printer_code=self.printerCode,
-                                                                             filename=filename)
+        return get_name_tag_name_tags_booking_code_filename_get.sync_detailed(client=self.client,
+                                                                              booking_code=self.booking.booking_code,
+                                                                              filename=filename)
 
     def __printFile(self, filename):
         print("Printing: " + filename)
