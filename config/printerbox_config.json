@@ -3,6 +3,7 @@
         "box_id": "XDESP95271",
         "number": "p",
         "printing_disabled": true,
-        "access_token": ""
+        "access_token": "printer_p",
+        "printer_server" : "printerbox_device_cupsd_1" 
     }
 }
