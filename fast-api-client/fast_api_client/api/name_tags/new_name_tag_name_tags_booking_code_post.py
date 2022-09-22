@@ -12,20 +12,18 @@ from ...types import UNSET, Response
 
 
 def _get_kwargs(
+    booking_code: str,
     *,
     client: AuthenticatedClient,
     json_body: NameData,
-    booking_code: str,
     layout: Layout,
 ) -> Dict[str, Any]:
-    url = "{}/name_tags/".format(client.base_url)
+    url = "{}/name_tags/{booking_code}".format(client.base_url, booking_code=booking_code)
 
     headers: Dict[str, str] = client.get_headers()
     cookies: Dict[str, Any] = client.get_cookies()
 
     params: Dict[str, Any] = {}
-    params["booking_code"] = booking_code
-
     json_layout = layout.value
 
     params["layout"] = json_layout
@@ -75,10 +73,10 @@ def _build_response(*, response: httpx.Response) -> Response[Union[Details, File
 
 
 def sync_detailed(
+    booking_code: str,
     *,
     client: AuthenticatedClient,
     json_body: NameData,
-    booking_code: str,
     layout: Layout,
 ) -> Response[Union[Details, FilePath, HTTPValidationError]]:
     """New Name Tag
@@ -93,9 +91,9 @@ def sync_detailed(
     """
 
     kwargs = _get_kwargs(
+        booking_code=booking_code,
         client=client,
         json_body=json_body,
-        booking_code=booking_code,
         layout=layout,
     )
 
@@ -108,10 +106,10 @@ def sync_detailed(
 
 
 def sync(
+    booking_code: str,
     *,
     client: AuthenticatedClient,
     json_body: NameData,
-    booking_code: str,
     layout: Layout,
 ) -> Optional[Union[Details, FilePath, HTTPValidationError]]:
     """New Name Tag
@@ -126,18 +124,18 @@ def sync(
     """
 
     return sync_detailed(
+        booking_code=booking_code,
         client=client,
         json_body=json_body,
-        booking_code=booking_code,
         layout=layout,
     ).parsed
 
 
 async def asyncio_detailed(
+    booking_code: str,
     *,
     client: AuthenticatedClient,
     json_body: NameData,
-    booking_code: str,
     layout: Layout,
 ) -> Response[Union[Details, FilePath, HTTPValidationError]]:
     """New Name Tag
@@ -152,9 +150,9 @@ async def asyncio_detailed(
     """
 
     kwargs = _get_kwargs(
+        booking_code=booking_code,
         client=client,
         json_body=json_body,
-        booking_code=booking_code,
         layout=layout,
     )
 
@@ -165,10 +163,10 @@ async def asyncio_detailed(
 
 
 async def asyncio(
+    booking_code: str,
     *,
     client: AuthenticatedClient,
     json_body: NameData,
-    booking_code: str,
     layout: Layout,
 ) -> Optional[Union[Details, FilePath, HTTPValidationError]]:
     """New Name Tag
@@ -184,9 +182,9 @@ async def asyncio(
 
     return (
         await asyncio_detailed(
+            booking_code=booking_code,
             client=client,
             json_body=json_body,
-            booking_code=booking_code,
             layout=layout,
         )
     ).parsed

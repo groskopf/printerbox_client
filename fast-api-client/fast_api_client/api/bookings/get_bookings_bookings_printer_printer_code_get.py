@@ -3,8 +3,7 @@ from typing import Any, Dict, Optional, Union
 import httpx
 
 from ...client import AuthenticatedClient
-from ...models.details import Details
-from ...models.file_path import FilePath
+from ...models.booking import Booking
 from ...models.http_validation_error import HTTPValidationError
 from ...models.printer_code import PrinterCode
 from ...types import Response
@@ -12,17 +11,16 @@ from ...types import Response
 
 def _get_kwargs(
     printer_code: PrinterCode,
-    filename: str,
     *,
     client: AuthenticatedClient,
 ) -> Dict[str, Any]:
-    url = "{}/name_tags/{printer_code}/{filename}".format(client.base_url, printer_code=printer_code, filename=filename)
+    url = "{}/bookings/printer/{printer_code}".format(client.base_url, printer_code=printer_code)
 
     headers: Dict[str, str] = client.get_headers()
     cookies: Dict[str, Any] = client.get_cookies()
 
     return {
-        "method": "delete",
+        "method": "get",
         "url": url,
         "headers": headers,
         "cookies": cookies,
@@ -30,15 +28,11 @@ def _get_kwargs(
     }
 
 
-def _parse_response(*, response: httpx.Response) -> Optional[Union[Details, FilePath, HTTPValidationError]]:
+def _parse_response(*, response: httpx.Response) -> Optional[Union[Booking, HTTPValidationError]]:
     if response.status_code == 200:
-        response_200 = FilePath.from_dict(response.json())
+        response_200 = Booking.from_dict(response.json())
 
         return response_200
-    if response.status_code == 404:
-        response_404 = Details.from_dict(response.json())
-
-        return response_404
     if response.status_code == 422:
         response_422 = HTTPValidationError.from_dict(response.json())
 
@@ -46,7 +40,7 @@ def _parse_response(*, response: httpx.Response) -> Optional[Union[Details, File
     return None
 
 
-def _build_response(*, response: httpx.Response) -> Response[Union[Details, FilePath, HTTPValidationError]]:
+def _build_response(*, response: httpx.Response) -> Response[Union[Booking, HTTPValidationError]]:
     return Response(
         status_code=response.status_code,
         content=response.content,
@@ -57,23 +51,20 @@ def _build_response(*, response: httpx.Response) -> Response[Union[Details, File
 
 def sync_detailed(
     printer_code: PrinterCode,
-    filename: str,
     *,
     client: AuthenticatedClient,
-) -> Response[Union[Details, FilePath, HTTPValidationError]]:
-    """Delete Name Tag
+) -> Response[Union[Booking, HTTPValidationError]]:
+    """Get Bookings
 
     Args:
         printer_code (PrinterCode): An enumeration.
-        filename (str):
 
     Returns:
-        Response[Union[Details, FilePath, HTTPValidationError]]
+        Response[Union[Booking, HTTPValidationError]]
     """
 
     kwargs = _get_kwargs(
         printer_code=printer_code,
-        filename=filename,
         client=client,
     )
 
@@ -87,46 +78,40 @@ def sync_detailed(
 
 def sync(
     printer_code: PrinterCode,
-    filename: str,
     *,
     client: AuthenticatedClient,
-) -> Optional[Union[Details, FilePath, HTTPValidationError]]:
-    """Delete Name Tag
+) -> Optional[Union[Booking, HTTPValidationError]]:
+    """Get Bookings
 
     Args:
         printer_code (PrinterCode): An enumeration.
-        filename (str):
 
     Returns:
-        Response[Union[Details, FilePath, HTTPValidationError]]
+        Response[Union[Booking, HTTPValidationError]]
     """
 
     return sync_detailed(
         printer_code=printer_code,
-        filename=filename,
         client=client,
     ).parsed
 
 
 async def asyncio_detailed(
     printer_code: PrinterCode,
-    filename: str,
     *,
     client: AuthenticatedClient,
-) -> Response[Union[Details, FilePath, HTTPValidationError]]:
-    """Delete Name Tag
+) -> Response[Union[Booking, HTTPValidationError]]:
+    """Get Bookings
 
     Args:
         printer_code (PrinterCode): An enumeration.
-        filename (str):
 
     Returns:
-        Response[Union[Details, FilePath, HTTPValidationError]]
+        Response[Union[Booking, HTTPValidationError]]
     """
 
     kwargs = _get_kwargs(
         printer_code=printer_code,
-        filename=filename,
         client=client,
     )
 
@@ -138,24 +123,21 @@ async def asyncio_detailed(
 
 async def asyncio(
     printer_code: PrinterCode,
-    filename: str,
     *,
     client: AuthenticatedClient,
-) -> Optional[Union[Details, FilePath, HTTPValidationError]]:
-    """Delete Name Tag
+) -> Optional[Union[Booking, HTTPValidationError]]:
+    """Get Bookings
 
     Args:
         printer_code (PrinterCode): An enumeration.
-        filename (str):
 
     Returns:
-        Response[Union[Details, FilePath, HTTPValidationError]]
+        Response[Union[Booking, HTTPValidationError]]
     """
 
     return (
         await asyncio_detailed(
             printer_code=printer_code,
-            filename=filename,
             client=client,
         )
     ).parsed
