@@ -1,17 +1,13 @@
-from datetime import date
-from xmlrpc.client import boolean
 import websocket
 import rel
 import json
-from asyncio import sleep
+from time import sleep
 
 from blink import blinkOff
 from blink import ledGreen
 from fast_api_client.models.booking import Booking
 from fast_api_client.models.printer_code import PrinterCode
 from printerbox import PrinterBox, PrinterboxConfig
-
-host_development : boolean = False
 
 
 def printWS(message: str):
@@ -45,8 +41,9 @@ def onWSOpen(ws):
     printWS("### opened connection ###")
 
 
-traceWebSocket = True
-debugWebSocket = True
+host_development : bool = False
+traceWebSocket : bool = True
+debugWebSocket : bool = True
 
 if __name__ == "__main__":
 
@@ -68,12 +65,12 @@ if __name__ == "__main__":
     while not printerBox.getBooking():
         sleep(5) 
 
+    print("Got booking code: " + printerBox.booking.booking_code)
+
     if not host_development:
         ledGreen()
 
         printerBox.readLabelFile()
-
-
 
     websocket.enableTrace(traceWebSocket)
     if host_development:
