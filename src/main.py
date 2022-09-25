@@ -18,7 +18,7 @@ def printWS(message: str):
 def loadPrinterConfig():
     with open('config/printerbox_config.json') as config_file:
         configDict = json.load(config_file)['config']
-        return  PrinterboxConfig(**configDict)
+        return PrinterboxConfig(**configDict)
 
 
 def onWSMessage(ws, message):
@@ -41,7 +41,10 @@ def onWSOpen(ws):
     printWS("### opened connection ###")
 
 
+host_development: bool = True
 localhost_api: bool = False
+traceWebSocket: bool = True
+debugWebSocket: bool = True
 
 if __name__ == "__main__":
 
