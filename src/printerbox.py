@@ -7,7 +7,7 @@ from xmlrpc.client import Boolean
 
 from pydantic import BaseModel
 
-from blink import blinkBlue, blinkMagenta, blinkRed
+from led import Led
 from fast_api_client import AuthenticatedClient
 from fast_api_client.models.booking import Booking
 from fast_api_client.models.printer_code import PrinterCode
@@ -21,6 +21,10 @@ class PrinterboxConfig(BaseModel):
     printing_disabled: Boolean
     access_token: str
     printer_server: str
+    host_development: bool
+    localhost_api: bool
+    trace_websocket: bool
+    debug_websocket: bool
 
 
 class PrinterBox:
@@ -31,8 +35,9 @@ class PrinterBox:
     booking: Booking
     printingDisabled: Boolean = False
     printer_label_code: str
+    led: Led
 
-    def __init__(self, apiUrl: str,  config: PrinterboxConfig):
+    def __init__(self, apiUrl: str,  config: PrinterboxConfig, led: Led):
         self.client = AuthenticatedClient(
             base_url=f"{apiUrl}",
             token=config.access_token,
@@ -41,6 +46,7 @@ class PrinterBox:
         self.printerCode = PrinterCode(config.box_id + '_' + config.number)
         self.printingDisabled = config.printing_disabled
         self.printerServer = config.printer_server
+        self.led = led
 
     def getBooking(self):
         try:
@@ -49,7 +55,7 @@ class PrinterBox:
                 client=self.client)
             if self.booking:
                 return True
-        except:
+        except: 
             pass
 
         return None
@@ -65,21 +71,22 @@ class PrinterBox:
     def newMessage(self, message: str):
         filePath = json.loads(message)
         filename = os.path.basename(filePath['filename'])
+        print("received: " + filename)
 
         nameTagPdf = self.__downloadFile(filename)
         if not nameTagPdf:
-            blinkRed(4)
-            # continue
+            self.led.blink_red(4)
             return
 
         self.__saveFile(filename, nameTagPdf.content)
 
         if self.__printFile(filename):
-            blinkBlue()
+            self.led.blink_blue()
         else:
-            blinkMagenta()
+            self.led.blink_magenta()
 
         self.__deleteFile(filename)
+
         delete_name_tag_name_tags_booking_code_filename_delete.sync(client=self.client,
                                                                     booking_code=self.booking.booking_code,
                                                                     filename=filename)

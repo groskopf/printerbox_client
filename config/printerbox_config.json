@@ -4,6 +4,10 @@
         "number": "p",
         "printing_disabled": true,
         "access_token": "printer_p",
-        "printer_server" : "printerbox_device_cupsd_1" 
+        "printer_server" : "printerbox_device_cupsd_1",
+        "host_development": true,
+        "localhost_api": false,
+        "trace_websocket": true,
+        "debug_websocket": true
     }
 }
