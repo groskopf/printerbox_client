@@ -41,9 +41,7 @@ def onWSOpen(ws):
     printWS("### opened connection ###")
 
 
-host_development : bool = False
-traceWebSocket : bool = True
-debugWebSocket : bool = True
+localhost_api: bool = False
 
 if __name__ == "__main__":
 
@@ -55,7 +53,7 @@ if __name__ == "__main__":
 
     # TODO Should we do some getting async? We might fail printing and then not delete files we have received on WS
 
-    if host_development:
+    if localhost_api:
         apiUrl = '127.0.0.1:8000'
         printerBox = PrinterBox(f"http://{apiUrl}", config)
     else:
@@ -73,10 +71,10 @@ if __name__ == "__main__":
         printerBox.readLabelFile()
 
     websocket.enableTrace(traceWebSocket)
-    if host_development:
-        websockerUrl = f'ws://{apiUrl}/name_tags/{printerBox.booking.booking_code}/ws'
+    if localhost_api:
+        websocketUrl = f'ws://{apiUrl}/name_tags/{printerBox.booking.booking_code}/ws'
     else:
-        websockerUrl = f'wss://{apiUrl}/name_tags/{printerBox.booking.booking_code}/ws'
+        websocketUrl = f'wss://{apiUrl}/name_tags/{printerBox.booking.booking_code}/ws'
     wsApp = websocket.WebSocketApp(websocketUrl,
                                 on_open=onWSOpen,
                                 on_message=onWSMessage,
