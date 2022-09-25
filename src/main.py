@@ -1,4 +1,5 @@
 import websocket
+import socket
 import rel
 import json
 from time import sleep
@@ -64,7 +65,7 @@ if __name__ == "__main__":
         printerBox = PrinterBox(f"https://{apiUrl}", config)
 
     while not printerBox.getBooking():
-        sleep(5) 
+        sleep(5)
 
     print("Got booking code: " + printerBox.booking.booking_code)
 
@@ -78,13 +79,18 @@ if __name__ == "__main__":
         websocketUrl = f'ws://{apiUrl}/name_tags/{printerBox.booking.booking_code}/ws'
     else:
         websocketUrl = f'wss://{apiUrl}/name_tags/{printerBox.booking.booking_code}/ws'
-    wsApp = websocket.WebSocketApp(websocketUrl,
-                                on_open=onWSOpen,
-                                on_message=onWSMessage,
-                                on_error=onWSError,
-                                on_close=onWSClose)
 
-    wsApp.run_forever(dispatcher=rel)  # Set dispatcher to automatic reconnection
+    wsApp = websocket.WebSocketApp(websocketUrl,
+                                   on_open=onWSOpen,
+                                   on_message=onWSMessage,
+                                   on_error=onWSError,
+                                   on_close=onWSClose)
+
+    socketOptions = [(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1),
+                     (socket.IPPROTO_TCP, socket.TCP_QUICKACK, 1),
+                     (socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1)]
+    wsApp.run_forever(dispatcher=rel,
+                      sockopt=socketOptions)
     rel.signal(2, rel.abort)  # Keyboard Interrupt
     rel.dispatch()
 
