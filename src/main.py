@@ -29,6 +29,7 @@ def onWSMessage(ws, message):
 
 def onWSError(ws, error):
     printWS("### error ###: " + repr(error))
+    raise SystemExit(1)
 
 
 def onWSClose(ws, close_status_code, close_msg):
@@ -36,7 +37,7 @@ def onWSClose(ws, close_status_code, close_msg):
     if close_status_code:
         printWS("status code: " + str(close_status_code))
     if close_msg:
-    printWS("message: " + close_msg)
+        printWS("message: " + close_msg)
 
 
 def onWSOpen(ws):
