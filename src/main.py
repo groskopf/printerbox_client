@@ -33,7 +33,9 @@ def onWSError(ws, error):
 
 def onWSClose(ws, close_status_code, close_msg):
     printWS("### closed connection ###")
-    printWS("status code: " + close_status_code)
+    if close_status_code:
+        printWS("status code: " + str(close_status_code))
+    if close_msg:
     printWS("message: " + close_msg)
 
 
